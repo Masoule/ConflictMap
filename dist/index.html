@@ -7,100 +7,87 @@
     <link rel="stylesheet" href="style.css" />
 
     <style>
-      path {
-        fill: none;
-        stroke: #333;
-        stroke-width: .5px;
+      p {
+        font-size: 10pt;
+        margin-left:20px;
       }
 
-      .land-boundary {
-        stroke-width: 1px;
+      .countries{
+        stroke: #fff;
       }
-
-      .county-boundary {
-        stroke: #ddd;
-      }
-
-      .site {
-      	stroke-width: .5px;
-        stroke: #333;
-        fill: #9cf;
-      }
-
-
     </style>
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script type="text/javascript" src="../src/main.js"></script>
-    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
-    <!-- <script src="/datamaps.world.min.js"></script> -->
-    <!-- <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script> -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <!-- <script src="../src/main.js"></script> -->
   </head>
 
     <body>
-      <h1>Violence</h1>
+      <script src="http://d3js.org/d3.v4.min.js"></script>
+      <script src="http://d3js.org/topojson.v2.min.js"></script>
+      <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+      <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+      <script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <!-- <script src="/datamaps.world.min.js"></script> -->
+      <!-- <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script> -->
+      <script src="../src/main.js"></script>
+      <h1></h1>
       <div class="">
       </div>
 
       <div id="slider3"></div>
 
       <script>
+      var color_na = d3.rgb("#d4d4d4");
+      var quantiles = [0, 0.2, 0.4, 0.6, 0.8, 1];
+      var init_year = 1990;
+      var headline = "Number of casualties";
+      var mapPath = "worldMap.json";
+      //map container
       var width = 960,
           height = 600;
 
-      var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
+      var svg = d3.select("body").insert("svg")
+                    .attr("id", "map")
+                    .attr("height", height)
+                    .attr("width", width);
+      var path = d3.geoPath(d3.geoRobinson().translate([width / 2, height / 2]));
+      //alternative rectangular map
+      // var path = d3.geoPath(d3.geoEquirectangular().translate([width / 2, height / 2]));
 
-      var projection = d3.geo.equirectangular()
-          .translate([width / 2, height / 2]);
-          // .scale(1280)
-      //
-      var path = d3.geo.path()
-          .projection(projection);
+      //alternative online map
+      // var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
-      var svg = d3.select("body").append("svg")
-          .attr("width", width)
-          .attr("height", height);
+      //load data
+      d3.json("yearly.json", function(error, d) {
+        if (error) throw error;
+        let data_all = d['killed'];
+        let data = data_all[init_year];
+        let color = calcColorScale(data);
 
-      d3.json(mapPath, function(error, worldMap) {
-        if (error) return console.error(error);
+        // load map data and render it
+        d3.json(mapPath, function(error, worldmap) {
+          if (error) throw error;
 
-        svg.append("path")
-            .datum(topojson.feature(worldMap, worldMap.objects.land))
-            .attr("d", path)
-            .attr("class", "land-boundary");
+          svg.append("g")
+            .attr("class", "countries")
+            .selectAll("path")
+            .data(topojson.feature(worldmap, worldmap.objects.world).features)
+            .enter().append("path")
+              .attr("d", path)
+              .attr("id", function(d) { return d.id; })
+              .call(fillMap, color, data)
+            .append("title")
+              .call(setPathTitle, data);
 
-        svg.append("path")
-            .datum(topojson.mesh(worldMap, worldMap.objects.countries, function(a, b) { return a !== b && (a.id / 1000 | 0) === (b.id / 1000 | 0); }))
-            .attr("d", path)
-            .attr("class", "country-boundary");
+        }); // map
 
-        d3.csv("data.csv")
-          .row(function(d) {
-            return {
-              lat: parseFloat(d.lat),
-              lng: parseFloat(d.lng),
-              location: d.location,
-              description: d.description,
-              year: parseInt(d.year),
-              killed: parseInt(d.killed),
-            };
-          })
-          .get(function(err, rows) {
-          	if (err) return console.error(err);
-            window.rows = rows;
-            rows.map((row)=>
-            svg.append('circle')
-            .attr('class','site')
-            .attr('cx', projection([row.lng,row.lat])[0])
-            .attr('cy', projection([row.lat,row.lat])[1])
-            .attr('r', (row.killed)/10000)
-          )
-          });
-      });
+        d3.select("#year").on("input", function() {
+            let upd_color = calcColorScale(data_all[this.value]);
+            updateMap(upd_color, data_all[this.value]);
+
+        });
+
+      }); //data
 
       </script>
       <script src="bundle.js"></script>
