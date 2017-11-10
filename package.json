@@ -1,0 +1,24 @@
+{
+  "name": "DataVisualization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Masoule/D3-Vis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Masoule/D3-Vis/issues"
+  },
+  "homepage": "https://github.com/Masoule/D3-Vis#readme",
+  "devDependencies": {
+    "webpack": "^3.8.1"
+  }
+}

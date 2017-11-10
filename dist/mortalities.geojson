@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "metadata": { "count": 156 },
+  "features": [{
+    "type": "Feature",
+    "properties": {
+      "killed": 2345,
+      "year": 1992,
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [71.1263, 36.4935, 206]
+    },
+    "id": "1"
+  },
+    {"type": "Feature",
+    "properties": {
+      "killed": 200345,
+      "year": 1890,
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [35.6970118, 51.2097339, 206]
+    },
+    "id": "1"
+    }
+  ],
+}
