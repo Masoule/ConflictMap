@@ -28,6 +28,9 @@
       var headline = "Number of casualties";
       var mapPath = "worldMap.json";
 
+      //headline
+      d3.select("body").insert("h2", ":first-child").text(headline + start_year);
+
       //map element
       var width = 960,
           height = 600;
@@ -55,20 +58,18 @@
         .attr("value", start_year)
         .attr("id", "slider");
 
-      d3.select("body").insert("h2", ":first-child").text(headline + start_year);
-
       //plot element
-      var margin = {top: 50, right:10, bottom:50, left:30},
+      var margin =
+          {top: 50, right:10, bottom:50, left:30},
           plotWidth = 960 - margin.left - margin.right,
           plotHeight = 300 - margin.top - margin.bottom;
 
       var x = d3.scaleTime()
-            .rangeRound([0, plotWidth]);
-
-      var y = d3.scaleLinear()
+            .rangeRound([0, plotWidth]),
+          y = d3.scaleLinear()
             .rangeRound([plotHeight, 0]);
 
-      var plot = d3.select("body")
+      var plot = d3.select("body p")
           .append("svg")
             .attr("id", "plot")
             .attr("width", plotWidth + margin.left + margin.right)
