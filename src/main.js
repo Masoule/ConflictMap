@@ -8,39 +8,13 @@ function addCircle(selection, data) {
     .domain([0, 1e6])
     .range([0, 15]);
 
+  console.log(data)
   selection
-    .attr("r", function(d) { return typeof data[d.id] === 'undefined' ? 0 : 1.5 });
-
-    // .attr("r", function(d) { return radius(data[d.id]); });
-
-  // d3.csv("data.csv")
-  // .row(function(d) {
-  //   return {
-  //     lat: parseFloat(d.lat),
-  //     lng: parseFloat(d.lng),
-  //     location: d.location,
-  //     description: d.description,
-  //     year: parseInt(d.year),
-  //     killed: parseInt(d.killed),
-  //   };
-  // })
-  // .get(function(err, rows) {
-  //   if (err) return console.error(err);
-  //   window.rows = rows;
-
-    // let locations = Object.keys(data)
-    // locations.map((country)=>
-    // svg.append('circle')
-    // .attr('class','site')
-    // .attr('cx', projection([country.lng,country.lat])[0])
-    // .attr('cy', projection([country.lat,country.lat])[1])
-    // .attr('r', data[country]/10000)
-    // )
-  // });
+    .attr("r", function(d) {
+      return typeof data[d.id] === 'undefined' ?
+      0 : radius(data[d.id]);
+    });
 }
-
-
-
 
 function setPathTitle(selection, data) {
   selection
@@ -64,11 +38,12 @@ function colorGradient(data) {
 }
 
 function updateMap(color, data) {
-  // fill paths
+  // update colors
   d3.selectAll("svg#map path").transition()
     .delay(50)
     .call(fillMap, color, data)
 
+  //update circles
   d3.selectAll("svg#map circle").transition()
     .delay(50)
     .call(addCircle, data);

@@ -83,8 +83,7 @@
             .append("title")
               .call(setPathTitle, data);
 
-          //add bubbles
-
+          //add circles
           svg.append("g")
             .attr("class", "bubble")
             .selectAll("circle")
@@ -92,7 +91,6 @@
             .enter().append("circle")
               .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
               .call(addCircle, data)
-
         }); // map
 
         // slider
