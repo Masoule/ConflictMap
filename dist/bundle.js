@@ -172,7 +172,7 @@ function renderLegend(color, data) {
 //         .attr("y", function(d) { return y(d.value) - 5; });
 // }
 
-function calcColorScale(data) {
+function colorGradient(data) {
   // get values and sort
   let data_values = Object.values(data).sort( function(a, b){ return a-b; });
 

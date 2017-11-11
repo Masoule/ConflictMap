@@ -65,13 +65,13 @@
         if (error) throw error;
         let data_all = d['killed'];
         let data = data_all[start_year];
-        let color = calcColorScale(data);
+        let color = colorGradient(data);
         // console.log(data)
 
-        // load map data and render it
+        // load map data
         d3.json(mapPath, function(error, worldmap) {
           if (error) throw error;
-
+          //adds colors
           svg.append("g")
             .attr("class", "countries")
             .selectAll("path")
@@ -83,11 +83,21 @@
             .append("title")
               .call(setPathTitle, data);
 
+          //add bubbles
+
+          svg.append("g")
+            .attr("class", "bubble")
+            .selectAll("circle")
+            .data(topojson.feature(worldmap, worldmap.objects.world).features)
+            .enter().append("circle")
+              .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+              .call(addCircle, data)
+
         }); // map
 
         // slider
         d3.select("#year").on("input", function() {
-            let new_color = calcColorScale(data_all[this.value]);
+            let new_color = colorGradient(data_all[this.value]);
             // console.log(this.value, new_color)
             updateMap(new_color, data_all[this.value]);
         });
