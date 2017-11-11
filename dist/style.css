@@ -1,1 +1,12 @@
+p {
+  font-size: 10pt;
+  margin-left:20px;
+}
 
+.countries{
+  stroke: #fff;
+}
+
+#year {
+  width: 900px;
+}
