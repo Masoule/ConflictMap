@@ -12,7 +12,7 @@ function addCircle(selection, data) {
   selection
     .attr("r", function(d) {
       return typeof data[d.id] === 'undefined' ?
-      0 : radius(data[d.id]);
+      0 : radius(data[d.id])*10;
     });
 }
 
@@ -53,5 +53,5 @@ function updateMap(color, data) {
     .call(setPathTitle, data);
 
   // update headline
-  d3.select("h2").text(headline + d3.select("#year").node().value);
+  d3.select("h2").text(headline + d3.select("#slider").node().value);
 }

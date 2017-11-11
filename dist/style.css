@@ -3,10 +3,23 @@ p {
   margin-left:20px;
 }
 
+body {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+#slider {
+  width: 900px;
+  height: 200px;
+  opacity: 0.05;
+}
+
 .countries{
   stroke: #fff;
 }
 
-#year {
-  width: 900px;
+.circles {
+  fill: blue;
+  fill-opacity: .5;
+  stroke: #fff;
+  stroke-width: .1px;
 }

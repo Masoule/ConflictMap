@@ -19,8 +19,7 @@
       <!-- <script src="/datamaps.world.min.js"></script> -->
       <!-- <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script> -->
       <script src="../src/main.js"></script>
-
-      <!-- <div id="slider3"></div> -->
+      <script src="../src/plot.js"></script>
 
       <script>
       var color_na = d3.rgb("#d4d4d4");
@@ -29,11 +28,9 @@
       var headline = "Number of casualties";
       var mapPath = "worldMap.json";
 
-
-      //map container
+      //map element
       var width = 960,
           height = 600;
-
 
       var svg = d3.select("body").insert("svg")
         .attr("id", "map")
@@ -50,15 +47,35 @@
       //alternative online map
       // var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
-      // slider
+      // slider element
       d3.select("body").insert("p").append("input")
         .attr("type", "range")
         .attr("min", "1990")
         .attr("max", "2016")
         .attr("value", start_year)
-        .attr("id", "year");
+        .attr("id", "slider");
 
       d3.select("body").insert("h2", ":first-child").text(headline + start_year);
+
+      //plot element
+      var margin = {top: 50, right:10, bottom:50, left:30},
+          plotWidth = 960 - margin.left - margin.right,
+          plotHeight = 300 - margin.top - margin.bottom;
+
+      var x = d3.scaleTime()
+            .rangeRound([0, plotWidth]);
+
+      var y = d3.scaleLinear()
+            .rangeRound([plotHeight, 0]);
+
+      var plot = d3.select("body")
+          .append("svg")
+            .attr("id", "plot")
+            .attr("width", plotWidth + margin.left + margin.right)
+            .attr("height", plotHeight + margin.top + margin.bottom)
+          .append("g")
+            .attr("class", "plot")
+            .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
       //load data
       d3.json("yearly.json", function(error, d) {
@@ -85,19 +102,23 @@
 
           //add circles
           svg.append("g")
-            .attr("class", "bubble")
+            .attr("class", "circles")
             .selectAll("circle")
             .data(topojson.feature(worldmap, worldmap.objects.world).features)
             .enter().append("circle")
               .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
               .call(addCircle, data)
+
+          //add plot
+          renderPlot();
+          // renderPlot(start_year);
         }); // map
 
-        // slider
-        d3.select("#year").on("input", function() {
+        // update with slider input
+        d3.select("#slider").on("input", function() {
             let new_color = colorGradient(data_all[this.value]);
-            // console.log(this.value, new_color)
             updateMap(new_color, data_all[this.value]);
+            // renderPlot(this.value);
         });
 
         // document.getElementById('year').addEventListener('input', function(e) {
