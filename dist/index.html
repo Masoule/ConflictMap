@@ -50,8 +50,13 @@
       //alternative online map
       // var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
-      // slider element
+      //tooltip
+      var div = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
+      // slider element
       d3.select("body").insert("p").append("input")
         .attr("type", "range")
         .attr("min", "1990")
@@ -111,6 +116,19 @@
             .enter().append("circle")
               .attr('class', 'circle')
               .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+              .on("mouseover", function(d) {
+                div.transition()
+                  .duration(200)
+                  .style("opacity", .9);
+                div.html(d.id + "<br/>"  + data[d.id])
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+              .on("mouseout", function(d) {
+              div.transition()
+                .duration(500)
+                .style("opacity", 0);
+              })
               .call(addCircle, data)
 
           //add plot
