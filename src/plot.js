@@ -34,8 +34,8 @@ function initializeChart() {
   area.y0(y(0));
 
   let plot = d3.select("svg#plot g.plot")
-  plot.exit().remove();
-
+  plot.selectAll('path').remove()
+  
   plot.append("path")
       .datum(filteredData)
       .attr("fill", "red")
