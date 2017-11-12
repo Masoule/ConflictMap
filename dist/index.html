@@ -60,7 +60,7 @@
 
       //plot element
       var margin =
-          {top: 50, right:10, bottom:50, left:30},
+          {top: 0, right:10, bottom:0, left:10},
           plotWidth = 960 - margin.left - margin.right,
           plotHeight = 300 - margin.top - margin.bottom;
 
@@ -111,15 +111,16 @@
               .call(addCircle, data)
 
           //add plot
-          renderPlot();
-          // renderPlot(start_year);
+          // renderPlot();
+          renderPlot(start_year);
         }); // map
 
         // update with slider input
         d3.select("#slider").on("input", function() {
-            let new_color = colorGradient(data_all[this.value]);
-            updateMap(new_color, data_all[this.value]);
-            // renderPlot(this.value);
+            let selectedYear = this.value;
+            let new_color = colorGradient(data_all[selectedYear]);
+            updateMap(new_color, data_all[selectedYear]);
+            renderPlot(selectedYear);
         });
 
         // document.getElementById('year').addEventListener('input', function(e) {

@@ -8,7 +8,6 @@ function addCircle(selection, data) {
     .domain([0, 1e6])
     .range([0, 15]);
 
-  console.log(data)
   selection
     .attr("r", function(d) {
       return typeof data[d.id] === 'undefined' ?
@@ -23,7 +22,6 @@ function setPathTitle(selection, data) {
 }
 
 function colorGradient(data) {
-  // console.log(data, "??/")
   let data_values = Object.values(data).sort( function(a, b){ return a-b; });
 
   quantiles_calc = quantiles.map( function(elem) {

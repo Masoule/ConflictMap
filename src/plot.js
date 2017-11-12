@@ -1,13 +1,28 @@
-function renderPlot() {
+function renderPlot(selectedYear) {
   var area = d3.area()
       .x(function(d) { return x(d.year); })
       .y1(function(d) { return y(d.killed); });
 
-  d3.csv("data.csv", function(d) {
+      // var filteredData = consdata.filter(function(d)
+      // { if(d["Criticality"]=="Low")
+      //         { return d;}
+      //     })
+
+  d3.csv("data.csv", function(csv) {
+    console.log("@@@",csv)
+      csv = csv.filter(function(d) {
+        return parseInt(d['year']) <= selectedYear;
+      })
+      console.log(csv)
+    }
+  )
+
+  console.log(selectedYear, filteredData)
+
+  d3.csv(filteredData, function(d) {
     d.year = parseInt(d.year);
-    d.killed = +d.killed;
     d.description = d.description;
-    return d;
+    d.killed = +d.killed;
   }, function(error, data) {
     if (error) throw error;
 
