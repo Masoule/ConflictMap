@@ -3,7 +3,7 @@ body {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   margin: auto;
   align-items: center;
-  background-color: #d4d4d4;
+  background-color: white;
   /*opacity: 0.5;*/
 }
 
@@ -17,10 +17,12 @@ p {
   height: 300px;
   opacity: 0.05;
   position: absolute;
+}
 
 .countries {
   stroke: #fff;
-  opacity: 0.05;
+  opacity: 0.5;
+  background-color: #d4d4d4;
 }
 /*
 .circles {
@@ -38,7 +40,6 @@ p {
   z-index: 10;
 }
 
-
 #plot {
   position: absolute;
 }
@@ -50,7 +51,7 @@ div.tooltip {
   height: 28px;
   padding: 2px;
   font: 12px sans-serif;
-  /*background: lightsteelblue;	*/
+  background: lightsteelblue;
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
