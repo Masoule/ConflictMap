@@ -11,7 +11,16 @@
       body {
         /*background-color: #8c8a8a;*/
         background-image: linear-gradient(#3a3838, #e5e5e5);
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        margin: auto;
+        align-items: center;
       }
+
+      p {
+        font-size: 10pt;
+        /*margin-left:20px;*/
+      }
+
       .countries {
         stroke: #fff;
         opacity: 0.8;
@@ -65,6 +74,7 @@
       <!-- <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script> -->
       <script src="../src/main.js"></script>
       <script src="../src/plot.js"></script>
+      <script src="../src/map.js"></script>
 
       <script>
       var default_color = d3.rgb("#f7f7f7");
@@ -132,61 +142,37 @@
             .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
       //load data
-      d3.json("yearly.json", function(error, d) {
-        if (error) throw error;
-        let data_all = d['killed'];
-        let data = data_all[start_year];
+      // d3.json("yearly.json", function(error, d) {
+      //   if (error) throw error;
+      //   let data_all = d['killed'];
+      var rawMapData
+
+      d3.csv("mapData.csv", function(csv) {
+        rawMapData = csv.map( d => {
+          d.killed = +d.killed
+          d.year = +d.year
+          d.duration = +d.duration
+          d.name = d.name
+          d.country = d.country
+          d.id = d.id
+          d.description = d.description
+          return d
+        })
+
+        let data = filterMapData(rawMapData, start_year)
         let color = colorGradient(data);
-
-        // load map data
-        d3.json(mapPath, function(error, worldmap) {
-          if (error) throw error;
-          //adds colors
-          svg.append("g")
-            .attr("class", "countries")
-            .selectAll("path")
-            .data(topojson.feature(worldmap, worldmap.objects.world).features)
-            .enter().append("path")
-              .attr("d", path)
-              .attr("id", function(d) { return d.id; })
-              .call(fillMap, color, data)
-            // .append("title")
-            //   .call(showInfo, data);
-
-          //add circles
-          svg.append("g")
-          .attr("class", "circles")
-          .selectAll("circle")
-          .data(topojson.feature(worldmap, worldmap.objects.world).features)
-          .enter().append("circle")
-          .attr('class', 'circle')
-          .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-          .on("mouseover", function(d) {
-            div.transition()
-            .duration(200)
-            .style("opacity", .9);
-            div.html(d.id + "<br/>" + data[d.id])
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
-          })
-          .on("mouseout", function(d) {
-            div.transition()
-            .duration(500)
-            .style("opacity", 0);
-          })
-          .call(addCircle, data)
-
-          //add plot
-          renderPlot(start_year);
-
-        }); // map
+        // load map
+        initializeMap(data, color)
+        //add plot
+        renderPlot(start_year);
 
         // update with slider input
         d3.select("#slider").on("input", function() {
             console.log(this.value)
             let selectedYear = this.value;
-            let new_color = colorGradient(data_all[selectedYear]);
-            updateMap(new_color, data_all[selectedYear]);
+            let newData = filterMapData(rawMapData, selectedYear)
+            let newColor = colorGradient(newData);
+            updateMap(newColor, newData);
             renderPlot(selectedYear);
         });
 

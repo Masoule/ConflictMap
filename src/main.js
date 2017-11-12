@@ -23,7 +23,6 @@ function addCircle(selection, data) {
 
 function colorGradient(data) {
   let data_values = Object.values(data).sort( function(a, b){ return a-b; });
-
   quantiles_calc = quantiles.map( function(elem) {
     return Math.ceil(d3.quantile(data_values, elem));
   });
