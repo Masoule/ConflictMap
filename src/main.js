@@ -30,7 +30,7 @@ function colorGradient(data) {
 
   let scale = d3.scaleQuantile()
   .domain(quantiles_calc)
-  .range(d3.schemeReds[(quantiles_calc.length)-1]);
+  .range(d3.schemeGreys[(quantiles_calc.length)-1]);
 
   return scale;
 }

@@ -77,22 +77,20 @@ function addCircle(selection, data) {
     .domain([0, 1e6])
     .range([0, 15]);
 
-  console.log(data)
   selection
     .attr("r", function(d) {
       return typeof data[d.id] === 'undefined' ?
-      0 : radius(data[d.id])*10;
+      0 : radius(data[d.id])*20;
     });
 }
 
-function showInfo(selection, data) {
-  selection
-  .text(function(d) { return "" + d.id + ", " +
-  (typeof data[d.id] === 'undefined' ? 'N/A' : data[d.id]); });
-}
+// function showInfo(selection, data) {
+//   selection
+//   .text(function(d) { return "" + d.id + ", " +
+//   (typeof data[d.id] === 'undefined' ? 'N/A' : data[d.id]); });
+// }
 
 function colorGradient(data) {
-  // console.log(data, "??/")
   let data_values = Object.values(data).sort( function(a, b){ return a-b; });
 
   quantiles_calc = quantiles.map( function(elem) {
@@ -101,7 +99,7 @@ function colorGradient(data) {
 
   let scale = d3.scaleQuantile()
   .domain(quantiles_calc)
-  .range(d3.schemeReds[(quantiles_calc.length)-1]);
+  .range(d3.schemeGreys[(quantiles_calc.length)-1]);
 
   return scale;
 }
@@ -118,50 +116,12 @@ function updateMap(color, data) {
     .call(addCircle, data);
 
   // update path titles
-  d3.selectAll("svg#map path title")
-    .call(showInfo, data);
+  // d3.selectAll("svg#map path title")
+  //   .call(showInfo, data);
 
-  // update headline
-  d3.select("h2").text(headline + d3.select("#slider").node().value);
+  // show selected year on chart
+  d3.select("h2").text( d3.select("#slider").node().value);
 }
-
-// function renderPlot() {
-//   var area = d3.area()
-//       .x(function(d) { return x(d.year); })
-//       .y1(function(d) { return y(d.killed); });
-//
-//   d3.csv("data.csv", function(d) {
-//     d.year = parseInt(d.year);
-//     d.killed = +d.killed;
-//     d.description = d.description;
-//     return d;
-//   }, function(error, data) {
-//     if (error) throw error;
-//
-//     x.domain(d3.extent(data, function(d) { return d.year; }));
-//     y.domain([0, d3.max(data, function(d) { return d.killed; })]);
-//     area.y0(y(0));
-//
-//     let plot = d3.select("svg#plot g.plot")
-//
-//     plot.append("path")
-//         .datum(data)
-//         .attr("fill", "red")
-//         .attr("d", area);
-//     plot.append("g")
-//         .attr("transform", "translate(0," + height + ")")
-//         .call(d3.axisBottom(x));
-//     plot.append("g")
-//         .call(d3.axisLeft(y))
-//     plot.append("text")
-//         .attr("fill", "#000")
-//         .attr("transform", "rotate(-90)")
-//         .attr("y", 6)
-//         .attr("dy", "0.71em")
-//         .attr("text-anchor", "end")
-//         .text("total casualties");
-//   });
-// }
 
 
 /***/ })
