@@ -1,6 +1,6 @@
 function fillMap(selection, color, data) {
   selection
-    .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? color_na : d3.rgb(color(data[d.id])); });
+    .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? default_color : d3.rgb(color(data[d.id])); });
 }
 
 function addCircle(selection, data) {
@@ -11,15 +11,15 @@ function addCircle(selection, data) {
   selection
     .attr("r", function(d) {
       return typeof data[d.id] === 'undefined' ?
-      0 : radius(data[d.id])*10;
+      0 : radius(data[d.id])*20;
     });
 }
 
-function setPathTitle(selection, data) {
-  selection
-  .text(function(d) { return "" + d.id + ", " +
-  (typeof data[d.id] === 'undefined' ? 'N/A' : data[d.id]); });
-}
+// function showInfo(selection, data) {
+//   selection
+//   .text(function(d) { return "" + d.id + ", " +
+//   (typeof data[d.id] === 'undefined' ? 'N/A' : data[d.id]); });
+// }
 
 function colorGradient(data) {
   let data_values = Object.values(data).sort( function(a, b){ return a-b; });
@@ -47,9 +47,9 @@ function updateMap(color, data) {
     .call(addCircle, data);
 
   // update path titles
-  d3.selectAll("svg#map path title")
-    .call(setPathTitle, data);
+  // d3.selectAll("svg#map path title")
+  //   .call(showInfo, data);
 
-  // update headline
-  d3.select("h2").text(headline + d3.select("#slider").node().value);
+  // show selected year on chart
+  d3.select("h2").text( d3.select("#slider").node().value);
 }

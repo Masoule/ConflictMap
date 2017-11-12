@@ -69,7 +69,7 @@
 
 function fillMap(selection, color, data) {
   selection
-    .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? color_na : d3.rgb(color(data[d.id])); });
+    .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? default_color : d3.rgb(color(data[d.id])); });
 }
 
 function addCircle(selection, data) {
@@ -85,7 +85,7 @@ function addCircle(selection, data) {
     });
 }
 
-function setPathTitle(selection, data) {
+function showInfo(selection, data) {
   selection
   .text(function(d) { return "" + d.id + ", " +
   (typeof data[d.id] === 'undefined' ? 'N/A' : data[d.id]); });
@@ -119,7 +119,7 @@ function updateMap(color, data) {
 
   // update path titles
   d3.selectAll("svg#map path title")
-    .call(setPathTitle, data);
+    .call(showInfo, data);
 
   // update headline
   d3.select("h2").text(headline + d3.select("#slider").node().value);

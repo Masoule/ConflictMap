@@ -3,6 +3,8 @@ body {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   margin: auto;
   align-items: center;
+  background-color: #d4d4d4;
+  /*opacity: 0.5;*/
 }
 
 p {
@@ -16,16 +18,26 @@ p {
   opacity: 0.05;
   position: absolute;
 
-.countries{
+.countries {
   stroke: #fff;
+  opacity: 0.05;
 }
-
+/*
 .circles {
-  fill: blue;
-  fill-opacity: .5;
+  fill: red;
+  fill-opacity: 0.6;
   stroke: #fff;
   stroke-width: .1px;
+}*/
+
+.circle {
+  fill: red;
+  fill-opacity: 0.6;
+  stroke: #fff;
+  stroke-width: .1px;
+  z-index: 10;
 }
+
 
 #plot {
   position: absolute;
