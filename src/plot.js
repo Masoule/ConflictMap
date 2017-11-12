@@ -8,7 +8,7 @@ function renderPlot(selectedYear) {
       //         { return d;}
       //     })
 
-  d3.csv("data.csv", function(csv) {
+  filteredData = d3.csv("data.csv", function(csv) {
     console.log("@@@",csv)
       csv = csv.filter(function(d) {
         return parseInt(d['year']) <= selectedYear;
