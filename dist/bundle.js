@@ -65,23 +65,19 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__map_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plot_js__ = __webpack_require__(2);
-// require "../src/plot.js";
-// require "../src/map.js";
-
-
-window.map = __WEBPACK_IMPORTED_MODULE_0__map_js__;
-window.plot = __WEBPACK_IMPORTED_MODULE_1__plot_js__;
+//data files
+var idsCSV = 'https://s3.amazonaws.com/war-maps/country_to_id.csv';
+var mapCSV = 'https://s3.amazonaws.com/war-maps/map_data.csv';
+var plotCSV = 'https://s3.amazonaws.com/war-maps/plot_data_1.csv';
+var mapPath = 'https://s3.amazonaws.com/war-maps/worldMap.json';
+//alternative rectangular map
+// var path = d3.geoPath(d3.geoEquirectangular().translate([width / 2, height / 2]));
+//alternative online map
+// var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
 var start_year = 1400;
-// var headline = "Number of casualties";
-// var mapPath = path.resolve('wwwroot', 'worldMap.json');
-
 //map element
 var width = (window.innerWidth) * 0.9,
     height = (window.innerHeight) * 0.7;
@@ -91,15 +87,12 @@ var svg = d3.select("body").insert("svg")
   .attr("height", height)
   .attr("width", width);
 
+var numberFormat = d3.format(",d")
+
 var projection = d3.geoRobinson()
   .translate([width / 2, height / 2]);
 
 var path = d3.geoPath(d3.geoRobinson().translate([width / 2, height / 2]));
-//alternative rectangular map
-// var path = d3.geoPath(d3.geoEquirectangular().translate([width / 2, height / 2]));
-
-//alternative online map
-// var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
 //tooltip
 var div = d3.select("body")
@@ -146,77 +139,50 @@ d3.select("p").append("input")
 var rawMapData
 var country_to_id
 
-// var idsCSV = path.resolve( 'wwwroot', '../data/country_to_id.csv' );
-// var idsCSV = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/data/country_to_id.csv';
-var idsCSV = 'https://s3.amazonaws.com/war-maps/country_to_id.csv';
+//load map data
 d3.csv( idsCSV, function(ids) {
   country_to_id = ids
-})
+  d3.csv(mapCSV, function(csv) {
+    rawMapData = csv.map( d => {
+      d.killed = +d.killed
+      d.year = +d.year
+      d.duration = +d.duration
+      d.name = d.name
+      d.country = d.country.trim()
+      var id_array = country_to_id.filter(dd => d.country === dd.country )
+      d.id = id_array.length ? id_array[0].id : 'X'
+      d.description = d.description
+      return d
+    })
 
-//load map data
-// var mapCSV = path.resolve('wwwroot', '../data/map_data.csv');
-// var mapCSV = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/dist/worldMap.json';
-var mapCSV = 'https://s3.amazonaws.com/war-maps/map_data.csv';
-d3.csv(mapCSV, function(csv) {
-  rawMapData = csv.map( d => {
-    d.killed = +d.killed
-    d.year = +d.year
-    d.duration = +d.duration
-    d.name = d.name
-    d.country = d.country.trim()
-    var id_array = country_to_id.filter(dd => d.country === dd.country )
-    d.id = id_array.length ? id_array[0].id : 'X'
-    d.description = d.description
-    return d
-  })
+    let data = filterMapData(start_year)
+    let color = colorGradient(data);
+    // load map
+    initializeMap(data, color)
+    //add plot
+    renderPlot(start_year);
 
-  let data = __WEBPACK_IMPORTED_MODULE_0__map_js__["filterMapData"](rawMapData, start_year)
-  let color = __WEBPACK_IMPORTED_MODULE_0__map_js__["colorGradient"](data);
-  // load map
-  // debugger
-  __WEBPACK_IMPORTED_MODULE_0__map_js__["initializeMap"](data, color)
-  //add plot
-  __WEBPACK_IMPORTED_MODULE_1__plot_js__["renderPlot"](start_year);
-
-  // update with slider input
-  d3.select("#slider").on("input", function() {
-      console.log(this.value)
-      let selectedYear = this.value;
-      let newData = __WEBPACK_IMPORTED_MODULE_0__map_js__["filterMapData"](rawMapData, selectedYear)
-      let newColor = __WEBPACK_IMPORTED_MODULE_0__map_js__["colorGradient"](newData);
-      __WEBPACK_IMPORTED_MODULE_0__map_js__["updateMap"](newColor, newData);
-      __WEBPACK_IMPORTED_MODULE_1__plot_js__["renderPlot"](selectedYear);
+    // update with slider input
+    d3.select("#slider").on("input", function() {
+        console.log(this.value)
+        let selectedYear = this.value;
+        let newData = filterMapData(selectedYear)
+        let newColor = colorGradient(newData);
+        updateMap(newColor, newData);
+        renderPlot(selectedYear);
+    });
   });
+})//data
 
-}); //data
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["filterMapData"] = filterMapData;
-/* harmony export (immutable) */ __webpack_exports__["initializeMap"] = initializeMap;
-/* harmony export (immutable) */ __webpack_exports__["updateMap"] = updateMap;
-/* harmony export (immutable) */ __webpack_exports__["colorGradient"] = colorGradient;
-/* harmony export (immutable) */ __webpack_exports__["fillMap"] = fillMap;
-var numberFormat = d3.format(",d")
-// var mapPath = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/data/map_data.csv';
 var default_color = d3.rgb("#f7f7f7");
 var quantiles = [0, 0.2, 0.4, 0.6, 0.8, 1];
-var mapPath = 'https://s3.amazonaws.com/war-maps/worldMap.json';
 
-function filterMapData(data, year) {
-  return data.filter(d => d.year >= year - 10 && d.year <= year )
+function filterMapData(year) {
+  return rawMapData.filter(d => d.year >= year - 10 && d.year <= year )
 }
 
 function initializeMap(data, color) {
-  // debugger
-  // debugger
   d3.json(mapPath, function(error, worldmap) {
-    // worldMap = JSON.parse( mapPath )
     if (error) throw error;
     //adds colors
     svg.append("g")
@@ -299,7 +265,7 @@ function addCircle(selection, data) {
       })
 }
 
-//optional functions for adding color gradient to countries
+//adding color gradient to countries
 function colorGradient(data) {
   let data_values = data.sort( function(a, b){ return a.killed - b.killed; });
   var quantiles_calc = quantiles.map( function(elem) {
@@ -317,36 +283,22 @@ function fillMap(selection, color, data) {
     .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? default_color : d3.rgb(color(data[d.id])); });
 }
 
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["renderPlot"] = renderPlot;
+//plot functions
 var rawData, filteredData;
 
 function renderPlot(selectedYear) {
-  // var plotCSV = path.resolve('wwwroot', '../data/plot_data_1.csv');
-  var plotCSV = 'https://s3.amazonaws.com/war-maps/plot_data_1.csv';
-  // var plotCSV = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/data/plot_data_1.csv';
-  console.log(plotCSV)
-  d3.csvParse(plotCSV, function(csv) {
-    // json = cs.parse( myjson );
+  d3.csv(plotCSV, function(csv) {
     rawData = csv.map(d => {
       d.killed = +d['total_mortalities']
       d.year = +d.year
       return d
     }).sort((a, b) => a.year - b.year)
-
     filterData(selectedYear)
     initializeChart()
   })
 }
 
 function filterData(thisYear) {
-
   filteredData = rawData.filter( d => d.year <= thisYear)
 
   //update headline
@@ -379,7 +331,6 @@ function initializeChart() {
       .attr("d", area)
       .on('mouseover', (d) => {
       })
-
   // plot.append("g")
   //     .attr("transform", "translate(0," + height + ")")
   //     .call(d3.axisBottom(x));
