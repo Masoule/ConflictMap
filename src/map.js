@@ -1,11 +1,18 @@
 var numberFormat = d3.format(",d")
+// var mapPath = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/data/map_data.csv';
+var default_color = d3.rgb("#f7f7f7");
+var quantiles = [0, 0.2, 0.4, 0.6, 0.8, 1];
+var mapPath = 'https://s3.amazonaws.com/war-maps/worldMap.json';
 
-function filterMapData(data, year) {
-  return rawMapData.filter(d => d.year >= year - 10 && d.year <= year )
+export function filterMapData(data, year) {
+  return data.filter(d => d.year >= year - 10 && d.year <= year )
 }
 
-function initializeMap(data, color) {
+export function initializeMap(data, color) {
+  // debugger
+  // debugger
   d3.json(mapPath, function(error, worldmap) {
+    // worldMap = JSON.parse( mapPath )
     if (error) throw error;
     //adds colors
     svg.append("g")
@@ -20,8 +27,6 @@ function initializeMap(data, color) {
     //add circles
     var circles = svg.append("g")
     .attr("class", "circles")
-
-    //circles.selectAll("circle").remove()
 
     circles.selectAll("circle")
     .data(topojson.feature(worldmap, worldmap.objects.world).features)
@@ -39,7 +44,7 @@ function initializeMap(data, color) {
   })
 }
 
-function updateMap(color, data) {
+export function updateMap(color, data) {
   // update colors
   d3.selectAll("svg#map path").transition()
     .delay(50)
@@ -91,9 +96,9 @@ function addCircle(selection, data) {
 }
 
 //optional functions for adding color gradient to countries
-function colorGradient(data) {
+export function colorGradient(data) {
   let data_values = data.sort( function(a, b){ return a.killed - b.killed; });
-  quantiles_calc = quantiles.map( function(elem) {
+  var quantiles_calc = quantiles.map( function(elem) {
     return Math.ceil(d3.quantile(data_values, elem));
   });
 
@@ -103,7 +108,7 @@ function colorGradient(data) {
   return scale;
 }
 
-function fillMap(selection, color, data) {
+export function fillMap(selection, color, data) {
   selection
     .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? default_color : d3.rgb(color(data[d.id])); });
 }

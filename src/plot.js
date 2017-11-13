@@ -1,7 +1,12 @@
 var rawData, filteredData;
 
-function renderPlot(selectedYear) {
-  d3.csv("../data/plot_data_1.csv", function(csv) {
+export function renderPlot(selectedYear) {
+  // var plotCSV = path.resolve('wwwroot', '../data/plot_data_1.csv');
+  var plotCSV = 'https://s3.amazonaws.com/war-maps/plot_data_1.csv';
+  // var plotCSV = 'https://raw.githubusercontent.com/Masoule/WarMaps/master/data/plot_data_1.csv';
+  console.log(plotCSV)
+  d3.csvParse(plotCSV, function(csv) {
+    // json = cs.parse( myjson );
     rawData = csv.map(d => {
       d.killed = +d['total_mortalities']
       d.year = +d.year
