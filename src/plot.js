@@ -13,19 +13,19 @@ function renderPlot(selectedYear) {
   })
 }
 
-function filterData(thisyear) {
+function filterData(thisYear) {
 
-  filteredData = rawData.filter( d => d.year <= thisyear)
+  filteredData = rawData.filter( d => d.year <= thisYear)
 
   //update headline
-  let yearRange = thisyear - 10;
+  let yearRange = thisYear - 10;
   let total = 0;
-  var rangeData = rawData.filter( d => { return d.year <= thisyear && d.year >= yearRange; })
+  var rangeData = rawData.filter( d => { return d.year <= thisYear && d.year >= yearRange; })
   rangeData.map( (d) => total += d.killed )
 
-  var thisYearData = filteredData.filter( d => {  return parseInt(d.year) === parseInt(thisyear); })
+  var thisYearData = filteredData.filter( d => {  return parseInt(d.year) === parseInt(thisYear); })
   thisYearData = thisYearData.length ? thisYearData[0] : {killed: 10}
-  d3.select("h2").text( "over " + numberFormat(total) + " between " + thisyear + " and " + yearRange );
+  d3.select("h2").text( "over " + numberFormat(total) + " between " + yearRange + " and " + thisYear );
 }
 
 function initializeChart() {

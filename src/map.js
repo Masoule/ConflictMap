@@ -69,20 +69,6 @@ function mouseover(d, data) {
   .style("top", (d3.event.pageY - 28) + "px");
 }
 
-function colorGradient(data) {
-  // console.log(data)
-  let data_values = data.sort( function(a, b){ return a.killed-b.killed; });
-  quantiles_calc = quantiles.map( function(elem) {
-    return Math.ceil(d3.quantile(data_values, elem));
-  });
-
-  let scale = d3.scaleQuantile()
-  .domain(quantiles_calc)
-  .range(d3.schemeGreys[(quantiles_calc.length)-1]);
-
-  return scale;
-}
-
 function addCircle(selection, data) {
   var radius = d3.scaleSqrt()
     .domain([0, 5000])//d3.max(data, d => d.killed)])
@@ -92,17 +78,32 @@ function addCircle(selection, data) {
       .attr('class', function(d, i) {
         var data_row = data.filter(dd => dd.id ===d.id)
         if(data_row.length) {
-          console.log(data_row[0], data_row[0].killed)
         }
         return data_row.length && data_row[0].killed===0 ? 'circle unknown' : 'circle'
       })
       .attr("r", function(d, i) {
         var data_row = data.filter(dd => dd.id ===d.id)
-        data_row = data_row.length ? data_row[0] : {killed: -1}
-        //console.log(data_row)
+        data_row = data_row.length ? data_row[0] : {killed: -1 }
 
-        return data_row.killed===0 ?
-        10 : radius(data_row.killed);
+        return data_row.killed === 0 ?
+        5 : (data_row.killed < 0 ? undefined : radius(data_row.killed));
       })
+}
 
+//optional functions for adding color gradient to countries
+function colorGradient(data) {
+  let data_values = data.sort( function(a, b){ return a.killed - b.killed; });
+  quantiles_calc = quantiles.map( function(elem) {
+    return Math.ceil(d3.quantile(data_values, elem));
+  });
+
+  let scale = d3.scaleQuantile()
+  .domain(quantiles_calc)
+  .range(d3.schemeGreys[(quantiles_calc.length)-1]);
+  return scale;
+}
+
+function fillMap(selection, color, data) {
+  selection
+    .attr("fill", function(d) { return typeof data[d.id] === 'undefined' ? default_color : d3.rgb(color(data[d.id])); });
 }

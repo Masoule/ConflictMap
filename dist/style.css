@@ -1,84 +1,74 @@
+body {
+  background-image: linear-gradient(#3a3838, #e5e5e5);
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  margin: auto;
+  align-items: center;
+  font-family: monospace, sans-serif;
+  height: -webkit-fill-available;
+}
 
-      body {
-        /*background-color: #8c8a8a;*/
-        background-image: linear-gradient(#3a3838, #e5e5e5);
-        font-family: 'Helvetica Neue', Helvetica, sans-serif;
-        margin: auto;
-        align-items: center;
-        font-family: monospace, sans-serif;
-      }
+p {
+  font-size: 10pt;
+  margin-left:5%;
+  margin-top: -10%;
+}
 
-      p {
-        font-size: 10pt;
-        margin-left:5%;
-        margin-top: -100px;
-      }
+h1 {
+  text-align: center;
+  margin: 50px;
+}
 
-      h1 {
-        text-align: center;
-        height: 100px;
-        /*position: absolute;*/
-        z-index: 10000;
-        margin-top: 50px;
-      }
+h2 {
+  text-align: center;
+  margin: 30px;
+  z-index: 10000;
+}
 
-      h2 {
-        text-align: center;
-        height: 100px;
-        /*position: absolute;*/
-        z-index: 10000;
-        /*margin-top: 300px;*/
-      }
+.countries {
+  stroke: #fff;
+  opacity: 0.8;
+  /*background-color: #e0e0e0;*/
+}
 
-      .countries {
-        stroke: #fff;
-        opacity: 0.8;
-        /*background-color: #e0e0e0;*/
-      }
+.circle {
+  fill: red;
+  fill-opacity: 0.6;
+  stroke: #fff;
+  stroke-width: .1px;
+  z-index: 10;
+}
 
-      .circle {
-        fill: red;
-        fill-opacity: 0.6;
-        stroke: #fff;
-        stroke-width: .1px;
-        z-index: 10;
-      }
+.unknown {
+  fill: #AAA;
+  fill-opacity: 0.1;
+  stroke: #AAA;
+  stroke-width: 1px;
+}
 
-      .unknown {
-        fill: #AAA;
-        fill-opacity: 0.1;
-        stroke: #AAA;
-        stroke-width: 1px;
-      }
+#slider {
+  /*width: 900px;*/
+  /*height: 300px;*/
+  opacity: 0.5;
+  /*position: absolute;*/
+}
 
-      #slider {
-        /*width: 900px;*/
-        /*height: 300px;*/
-        opacity: 0.5;
-        /*position: absolute;*/
-      }
+#plot {
+}
 
-      #plot {
-      }
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #d6cdcd;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
 
-      div.tooltip {
-        position: absolute;
-        text-align: center;
-        /*
-        width: 60px;
-        height: 28px;
-        */
-        padding: 2px;
-        font: 12px sans-serif;
-        background: #d6cdcd;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-      }
-
-      #map {
-        /*margin-top: 5%;*/
-        margin-bottom: -300px;
-        margin-left: 5%;
-        /*position: absolute;*/
-      }
+#map {
+  /*margin-top: 5%;*/
+  margin-bottom: -300px;
+  margin-left: 5%;
+  /*position: absolute;*/
+}
