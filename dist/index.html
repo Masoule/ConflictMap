@@ -95,7 +95,7 @@
       //   let data_all = d['killed'];
       var rawMapData
 
-      d3.csv("mapData.csv", function(csv) {
+      d3.csv("../data/map_data.csv", function(csv) {
         rawMapData = csv.map( d => {
           d.killed = +d.killed
           d.year = +d.year

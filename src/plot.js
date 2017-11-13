@@ -2,7 +2,7 @@ var rawData, filteredData;
 var height = 300
 
 function renderPlot(selectedYear) {
-  d3.csv("data.csv", function(csv) {
+  d3.csv("../data/plot_data.csv", function(csv) {
     rawData = csv.map(d => {
       d.killed = +d.killed
       d.year = +d.year
