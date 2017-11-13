@@ -1,5 +1,4 @@
 var rawData, filteredData;
-var height = 300
 
 function renderPlot(selectedYear) {
   d3.csv("../data/plot_data_1.csv", function(csv) {
@@ -14,18 +13,19 @@ function renderPlot(selectedYear) {
   })
 }
 
-// setTimeout(()=> {
-//      filterData(1992)
-//      initializeChart()
-// }, 2000)
-
 function filterData(thisyear) {
 
   filteredData = rawData.filter( d => d.year <= thisyear)
 
+  //update headline
+  let yearRange = thisyear - 10;
+  let total = 0;
+  var rangeData = rawData.filter( d => { return d.year <= thisyear && d.year >= yearRange; })
+  rangeData.map( (d) => total += d.killed )
+
   var thisYearData = filteredData.filter( d => {  return parseInt(d.year) === parseInt(thisyear); })
   thisYearData = thisYearData.length ? thisYearData[0] : {killed: 10}
-  d3.select("h2").text( numberFormat(thisYearData.killed) + " between " + thisyear + " and " + (thisyear+10));
+  d3.select("h2").text( "over " + numberFormat(total) + " between " + thisyear + " and " + yearRange );
 }
 
 function initializeChart() {
@@ -46,7 +46,6 @@ function initializeChart() {
       .attr("fill", "red")
       .attr("d", area)
       .on('mouseover', (d) => {
-        //console.log(d)
       })
 
   // plot.append("g")
@@ -62,9 +61,4 @@ function initializeChart() {
       .attr("y", 6)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
-      // .text("Total casualties/milion");
-      // show selected year on chart
-
 }
-
-// renderPlot()

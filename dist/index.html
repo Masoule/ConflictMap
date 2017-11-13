@@ -6,9 +6,6 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="./style.css" />
 
-    <style media="screen">
-
-    </style>
   </head>
 
     <body>
@@ -34,7 +31,7 @@
 
       //map element
       var width = (window.innerWidth) * 0.9,
-          height = (window.innerHeight) * 0.6;
+          height = (window.innerHeight) * 0.7;
 
       var svg = d3.select("body").insert("svg")
         .attr("id", "map")
@@ -65,9 +62,9 @@
       d3.select("body p").insert("h2")
 
       var margin =
-          {top: 0, right:10, bottom:0, left:10},
+          {top: (window.innerHeight) * 0.1, right:10, bottom:0, left:10},
           plotWidth = width - margin.left - margin.right,
-          plotHeight = 500 - margin.top - margin.bottom;
+          plotHeight = (window.innerHeight) * 0.4 - margin.top - margin.bottom;
 
       var x = d3.scaleLinear()
             .rangeRound([0, plotWidth]),
@@ -92,17 +89,15 @@
         .attr("id", "slider")
         .style("width", width + "px")
 
-      //load data
-      // d3.json("yearly.json", function(error, d) {
-      //   if (error) throw error;
-      //   let data_all = d['killed'];
+      //find country id's to find the location on map
       var rawMapData
-
       var country_to_id
+
       d3.csv("../data/country_to_id.csv", function(ids) {
         country_to_id = ids
       })
 
+      //load map data
       d3.csv("../data/map_data.csv", function(csv) {
         rawMapData = csv.map( d => {
           d.killed = +d.killed
