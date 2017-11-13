@@ -4,9 +4,10 @@
   <head>
   	<title>D3 Mapping Timeline</title>
     <meta charset="utf-8">
-    <!-- <link rel="stylesheet" href="./style.css" /> -->
+    <link rel="stylesheet" href="./style.css" />
 
     <style media="screen">
+
     </style>
   </head>
 
@@ -27,7 +28,7 @@
       <script>
       var default_color = d3.rgb("#f7f7f7");
       var quantiles = [0, 0.2, 0.4, 0.6, 0.8, 1];
-      var start_year = 1990;
+      var start_year = 1400;
       // var headline = "Number of casualties";
       var mapPath = "worldMap.json";
 
@@ -35,8 +36,8 @@
       // d3.select("body").insert("h2", ":first-child").text(headline + start_year);
 
       //map element
-      var width = 960,
-          height = 600;
+      var width = (window.innerWidth) * 0.9,
+          height = (window.innerHeight) * 0.6;
 
       var svg = d3.select("body").insert("svg")
         .attr("id", "map")
@@ -62,17 +63,18 @@
       // slider element
       d3.select("body").insert("p").append("input")
         .attr("type", "range")
-        .attr("min", "1990")
-        .attr("max", "2016")
+        .attr("min", "1400")
+        .attr("max", "2000")
         .attr("value", start_year)
-        .attr("id", "slider");
+        .attr("id", "slider")
+        .style("width", width + "px")
 
       //plot element
       d3.select("p").insert("h2", ":first-child").text(start_year);
 
       var margin =
           {top: 0, right:10, bottom:0, left:10},
-          plotWidth = 960 - margin.left - margin.right,
+          plotWidth = width - margin.left - margin.right,
           plotHeight = 300 - margin.top - margin.bottom;
 
       var x = d3.scaleTime()
@@ -95,14 +97,20 @@
       //   let data_all = d['killed'];
       var rawMapData
 
+      var country_to_id
+      d3.csv("../data/country_to_id.csv", function(ids) {
+        country_to_id = ids
+      })
+
       d3.csv("../data/map_data.csv", function(csv) {
         rawMapData = csv.map( d => {
           d.killed = +d.killed
           d.year = +d.year
           d.duration = +d.duration
           d.name = d.name
-          d.country = d.country
-          d.id = d.id
+          d.country = d.country.trim()
+          var id_array = country_to_id.filter(dd => d.country === dd.country )
+          d.id = id_array.length ? id_array[0].id : 'X'
           d.description = d.description
           return d
         })

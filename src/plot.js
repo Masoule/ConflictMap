@@ -2,12 +2,12 @@ var rawData, filteredData;
 var height = 300
 
 function renderPlot(selectedYear) {
-  d3.csv("../data/plot_data.csv", function(csv) {
+  d3.csv("../data/plot_data_1.csv", function(csv) {
     rawData = csv.map(d => {
       d.killed = +d.killed
       d.year = +d.year
       return d
-    })
+    }).sort((a, b) => a.year - b.year)
 
     filterData(selectedYear)
     initializeChart()
@@ -26,6 +26,7 @@ function filterData(year) {
 
 function initializeChart() {
   var area = d3.area()
+    .curve(d3.curveMonotoneX)
     .x(function(d) { return x(d.year); })
     .y1(function(d) { return y(d.killed); });
 

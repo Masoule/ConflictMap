@@ -27,17 +27,19 @@
       }
 
       #slider {
-        width: 900px;
+        /*width: 900px;*/
         height: 300px;
-        opacity: 0.05;
+        opacity: 0.5;
         position: absolute;
       }
 
       div.tooltip {
         position: absolute;
         text-align: center;
+        /*
         width: 60px;
         height: 28px;
+        */
         padding: 2px;
         font: 12px sans-serif;
         background: lightsteelblue;
