@@ -4,7 +4,7 @@ var height = 300
 function renderPlot(selectedYear) {
   d3.csv("../data/plot_data_1.csv", function(csv) {
     rawData = csv.map(d => {
-      d.killed = +d.killed
+      d.killed = +d['total_mortalities']
       d.year = +d.year
       return d
     }).sort((a, b) => a.year - b.year)
@@ -19,9 +19,13 @@ function renderPlot(selectedYear) {
 //      initializeChart()
 // }, 2000)
 
-function filterData(year) {
-  filteredData = rawData.filter( d => d.year <= year)
-  // console.log(filteredData)
+function filterData(thisyear) {
+
+  filteredData = rawData.filter( d => d.year <= thisyear)
+
+  var thisYearData = filteredData.filter( d => {  return parseInt(d.year) === parseInt(thisyear); })
+  thisYearData = thisYearData.length ? thisYearData[0] : {killed: 10}
+  d3.select("h2").text( numberFormat(thisYearData.killed) + " between " + thisyear + " and " + (thisyear+10));
 }
 
 function initializeChart() {
@@ -40,11 +44,14 @@ function initializeChart() {
   plot.append("path")
       .datum(filteredData)
       .attr("fill", "red")
-      .attr("d", area);
+      .attr("d", area)
+      .on('mouseover', (d) => {
+        //console.log(d)
+      })
 
-  plot.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+  // plot.append("g")
+  //     .attr("transform", "translate(0," + height + ")")
+  //     .call(d3.axisBottom(x));
 
   // plot.append("g")
   //     .call(d3.axisLeft(y))
@@ -55,7 +62,9 @@ function initializeChart() {
       .attr("y", 6)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
-      .text("Total casualties/milion");
+      // .text("Total casualties/milion");
+      // show selected year on chart
+
 }
 
 // renderPlot()

@@ -32,9 +32,6 @@
       // var headline = "Number of casualties";
       var mapPath = "worldMap.json";
 
-      //headline
-      // d3.select("body").insert("h2", ":first-child").text(headline + start_year);
-
       //map element
       var width = (window.innerWidth) * 0.9,
           height = (window.innerHeight) * 0.6;
@@ -60,29 +57,24 @@
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-      // slider element
-      d3.select("body").insert("p").append("input")
-        .attr("type", "range")
-        .attr("min", "1400")
-        .attr("max", "2000")
-        .attr("value", start_year)
-        .attr("id", "slider")
-        .style("width", width + "px")
-
       //plot element
-      d3.select("p").insert("h2", ":first-child").text(start_year);
+      d3.select("body").insert("p")
+      //headline
+      d3.select("body p").insert("h1", ":first-child")
+        .text("Human Casualties of War");
+      d3.select("body p").insert("h2")
 
       var margin =
           {top: 0, right:10, bottom:0, left:10},
           plotWidth = width - margin.left - margin.right,
-          plotHeight = 300 - margin.top - margin.bottom;
+          plotHeight = 500 - margin.top - margin.bottom;
 
-      var x = d3.scaleTime()
+      var x = d3.scaleLinear()
             .rangeRound([0, plotWidth]),
           y = d3.scaleLinear()
             .rangeRound([plotHeight, 0]);
 
-      var plot = d3.select("body p")
+      var plot = d3.select("p")
           .append("svg")
             .attr("id", "plot")
             .attr("width", plotWidth + margin.left + margin.right)
@@ -90,6 +82,15 @@
           .append("g")
             .attr("class", "plot")
             .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
+      // slider element
+      d3.select("p").append("input")
+        .attr("type", "range")
+        .attr("min", "1400")
+        .attr("max", "2000")
+        .attr("value", start_year)
+        .attr("id", "slider")
+        .style("width", width + "px")
 
       //load data
       // d3.json("yearly.json", function(error, d) {

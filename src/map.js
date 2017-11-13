@@ -1,7 +1,7 @@
-var numberFormat = d3.format(",.2r")
+var numberFormat = d3.format(",d")
 
 function filterMapData(data, year) {
-  return rawMapData.filter(d => d.year >= year - 10 && d.year <= year +10 )
+  return rawMapData.filter(d => d.year >= year - 10 && d.year <= year )
 }
 
 function initializeMap(data, color) {
@@ -56,9 +56,6 @@ function updateMap(color, data) {
   // update path titles
   // d3.selectAll("svg#map path title")
   //   .call(showInfo, data);
-
-  // show selected year on chart
-  d3.select("h2").text( d3.select("#slider").node().value);
 }
 
 function mouseover(d, data) {
@@ -67,7 +64,7 @@ function mouseover(d, data) {
   div.transition()
   .duration(200)
   .style("opacity", .9);
-  div.html(data_row.name + "<br/>" + data_row.description + "<br/>" + "Over" + numberFormat(data_row.killed) + " casualties" + "<br/>")
+  div.html(data_row.name + "<br/>" + data_row.description + "<br/>" + (data_row.killed===0 ? 'uknonwn' : "over " + numberFormat(data_row.killed)) + " casualties" + "<br/>")
   .style("left", (d3.event.pageX) + "px")
   .style("top", (d3.event.pageY - 28) + "px");
 }
@@ -92,18 +89,20 @@ function addCircle(selection, data) {
     .range([0, 15]);
 
   selection
-    .attr("r", function(d, i) {
-      //console.log(d, data, d.id)
-      if(i===0) {
-        console.log(data)
-      }
-      var data_row = data.filter(dd => dd.id ===d.id)
-      data_row = data_row.length ? data_row[0] : {killed: 0}
-      //console.log(data_row)
-      if(data_row.killed) {
-        console.log(d, data, data_row)
-      }
-      return typeof data_row.killed === 'undefined' ?
-      0 : radius(data_row.killed);
-    });
+      .attr('class', function(d, i) {
+        var data_row = data.filter(dd => dd.id ===d.id)
+        if(data_row.length) {
+          console.log(data_row[0], data_row[0].killed)
+        }
+        return data_row.length && data_row[0].killed===0 ? 'circle unknown' : 'circle'
+      })
+      .attr("r", function(d, i) {
+        var data_row = data.filter(dd => dd.id ===d.id)
+        data_row = data_row.length ? data_row[0] : {killed: -1}
+        //console.log(data_row)
+
+        return data_row.killed===0 ?
+        10 : radius(data_row.killed);
+      })
+
 }

@@ -5,11 +5,29 @@
         font-family: 'Helvetica Neue', Helvetica, sans-serif;
         margin: auto;
         align-items: center;
+        font-family: monospace, sans-serif;
       }
 
       p {
         font-size: 10pt;
-        /*margin-left:20px;*/
+        margin-left:5%;
+        margin-top: -100px;
+      }
+
+      h1 {
+        text-align: center;
+        height: 100px;
+        /*position: absolute;*/
+        z-index: 10000;
+        /*margin-top: 300px;*/
+      }
+
+      h2 {
+        text-align: center;
+        height: 100px;
+        /*position: absolute;*/
+        z-index: 10000;
+        /*margin-top: 300px;*/
       }
 
       .countries {
@@ -26,11 +44,21 @@
         z-index: 10;
       }
 
+      .unknown {
+        fill: #AAA;
+        fill-opacity: 0.1;
+        stroke: #AAA;
+        stroke-width: 1px;
+      }
+
       #slider {
         /*width: 900px;*/
-        height: 300px;
+        /*height: 300px;*/
         opacity: 0.5;
-        position: absolute;
+        /*position: absolute;*/
+      }
+
+      #plot {
       }
 
       div.tooltip {
@@ -42,12 +70,15 @@
         */
         padding: 2px;
         font: 12px sans-serif;
-        background: lightsteelblue;
+        background: #d6cdcd;
         border: 0px;
         border-radius: 8px;
         pointer-events: none;
       }
 
       #map {
-        margin-bottom: -200px;
+        margin-top: 5%;
+        margin-bottom: -300px;
+        margin-left: 5%;
+        /*position: absolute;*/
       }
