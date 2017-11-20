@@ -1,4 +1,62 @@
-body {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+li {
+	list-style: none;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 34px;
+  font-weight: 600;
+  text-align: center;
+  margin: 50px;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  margin: 30px;
+  z-index: 100;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+a {
+  color: inherit;
+}
+
+p {
+  margin: 20px 0;
+}
+
+a:hover {
+  color: red;
+}
+
+body, main {
   background-image: linear-gradient(#3a3838, #e5e5e5);
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   margin: auto;
@@ -7,22 +65,11 @@ body {
   height: -webkit-fill-available;
 }
 
-p {
-  font-size: 10pt;
+#plot-container { font-size: 10pt;
   margin-left:5%;
   margin-top: -10%;
 }
 
-h1 {
-  text-align: center;
-  margin: 50px;
-}
-
-h2 {
-  text-align: center;
-  margin: 30px;
-  z-index: 10000;
-}
 
 .countries {
   stroke: #fff;
@@ -46,10 +93,7 @@ h2 {
 }
 
 #slider {
-  /*width: 900px;*/
-  /*height: 300px;*/
   opacity: 0.5;
-  /*position: absolute;*/
 }
 
 #plot {
@@ -58,7 +102,7 @@ h2 {
 div.tooltip {
   position: absolute;
   text-align: center;
-  padding: 2px;
+  padding: 4px;
   font: 12px sans-serif;
   background: #d6cdcd;
   border: 0px;
@@ -67,8 +111,74 @@ div.tooltip {
 }
 
 #map {
-  /*margin-top: 5%;*/
   margin-bottom: -300px;
   margin-left: 5%;
-  /*position: absolute;*/
+}
+
+#open-modal {
+	/*margin: ;*/
+}
+
+.open-modal-icon {
+  color: #686c72;
+	display: flex;
+	padding: 40px 40px;
+	padding-bottom: 10px;
+	font-size: 24px;
+}
+
+.modal {
+  background-color: rgba(0,0,0,0.5);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+}
+
+.about-modal {
+  background-color: rgba(255, 255, 255, 0.85);
+	font-size: 17px;
+  margin: 10% auto;
+  border: 1px solid #ccc;
+  width: 50%;
+	padding: 40px;
+}
+
+.close-modal {
+    color: grey;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #b0b8c4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.features div {
+	margin: 15px;
+	display: flex;
+}
+
+.features ul li {
+	margin-left: 5px;
+}
+
+.modal-footer {
+  	font-size: 14px;
+    margin-top: 30px;
+}
+
+.modal-footer i {
+  	font-size: 20px;
+}
+
+.modal-footer i:hover {
+  color: red;
 }

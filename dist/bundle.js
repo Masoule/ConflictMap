@@ -67,6 +67,24 @@
 /* 0 */
 /***/ (function(module, exports) {
 
+const modal = document.getElementsByClassName('modal')[0];
+const open = document.getElementById("open-modal");
+const close = document.getElementsByClassName("close-modal")[0];
+
+open.onclick = function() {
+    modal.style.display = "block";
+};
+
+close.onclick = function() {
+    modal.style.display = "none";
+};
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";
+  }
+};
+
 //data files
 var idsCSV = 'https://s3.amazonaws.com/war-maps/country_to_id.csv';
 var mapCSV = 'https://s3.amazonaws.com/war-maps/map_data.csv';
@@ -78,16 +96,16 @@ var mapPath = 'https://s3.amazonaws.com/war-maps/worldMap.json';
 // var mapPath = "https://unpkg.com/world-atlas@1/world/110m.json";
 
 var start_year = 1400;
+var numberFormat = d3.format(",d")
+
 //map element
 var width = (window.innerWidth) * 0.9,
     height = (window.innerHeight) * 0.7;
 
-var svg = d3.select("body").insert("svg")
+var svg = d3.select("section").insert("svg")
   .attr("id", "map")
   .attr("height", height)
   .attr("width", width);
-
-var numberFormat = d3.format(",d")
 
 var projection = d3.geoRobinson()
   .translate([width / 2, height / 2]);
@@ -95,17 +113,21 @@ var projection = d3.geoRobinson()
 var path = d3.geoPath(d3.geoRobinson().translate([width / 2, height / 2]));
 
 //tooltip
-var div = d3.select("body")
-.append("div")
-.attr("class", "tooltip")
-.style("opacity", 0);
+var tooltipDiv = d3.select("section")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
 //plot element
-d3.select("body").insert("p")
+d3.select("section").insert("p")
+  .attr("id", "plot-container")
+
 //headline
-d3.select("body p").insert("h1", ":first-child")
+d3.select("section p").insert("h1", ":first-child")
   .text("Human Casualties of War");
-d3.select("body p").insert("h2")
+
+d3.select("section p")
+  .insert("h2")
 
 var margin =
     {top: (window.innerHeight) * 0.1, right:10, bottom:0, left:10},
@@ -117,7 +139,7 @@ var x = d3.scaleLinear()
     y = d3.scaleLinear()
       .rangeRound([plotHeight, 0]);
 
-var plotEl = d3.select("p")
+var plotEl = d3.select("section p")
     .append("svg")
       .attr("id", "plot")
       .attr("width", plotWidth + margin.left + margin.right)
@@ -127,13 +149,15 @@ var plotEl = d3.select("p")
       .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
 // slider element
-d3.select("p").append("input")
+d3.select("section p").append("input")
   .attr("type", "range")
   .attr("min", "1400")
   .attr("max", "2000")
   .attr("value", start_year)
   .attr("id", "slider")
   .style("width", width + "px")
+
+  // var handle = slider.insert("circle", ".track-overlay")
 
 //find country id's to find the location on map
 var rawMapData
@@ -170,6 +194,16 @@ d3.csv( idsCSV, function(ids) {
         let newColor = colorGradient(newData);
         updateMap(newColor, newData);
         renderPlot(selectedYear);
+
+    // d3.select("#slider").insert("g", ".track-overlay")
+    //     .attr("class", "ticks")
+    //     .attr("transform", "translate(0," + 18 + ")")
+    //   .selectAll("text")
+    //   .data(x.ticks(10))
+    //   .enter().append("text")
+    //     .attr("x", x)
+    //     .attr("text-anchor", "middle")
+    //     .text(function(d) { return selectedYear; });
     });
   });
 })//data
@@ -206,7 +240,7 @@ function initializeMap(data, color) {
     .attr("transform", function(d) { /*console.log(d, path.centroid(d));*/ return path.centroid(d)[0] ? "translate(" + path.centroid(d) + ")" : "translate(0,0)"; })
     .on("mouseover", (d) => mouseover(d, data))
     .on("mouseout", function(d) {
-      div.transition()
+      tooltipDiv.transition()
       .duration(500)
       .style("opacity", 0);
     })
@@ -236,10 +270,10 @@ function updateMap(color, data) {
 function mouseover(d, data) {
   var data_row = data.filter(dd => dd.id ===d.id)
   data_row = data_row.length ? data_row[0] : {killed: 0}
-  div.transition()
+  tooltipDiv.transition()
   .duration(200)
   .style("opacity", .9);
-  div.html(data_row.name + "<br/>" + data_row.description + "<br/>" + (data_row.killed===0 ? 'uknonwn' : "over " + numberFormat(data_row.killed)) + " casualties" + "<br/>")
+  tooltipDiv.html(data_row.name + "<br/>" + data_row.description + "<br/>" + (data_row.killed===0 ? 'unkonwn' : "over " + numberFormat(data_row.killed)) + " casualties" + "<br/>")
   .style("left", (d3.event.pageX) + "px")
   .style("top", (d3.event.pageY - 28) + "px");
 }
@@ -309,7 +343,9 @@ function filterData(thisYear) {
 
   var thisYearData = filteredData.filter( d => {  return parseInt(d.year) === parseInt(thisYear); })
   thisYearData = thisYearData.length ? thisYearData[0] : {killed: 10}
-  d3.select("h2").text( "over " + numberFormat(total) + " between " + yearRange + " and " + thisYear );
+  d3.select("h2")
+    // .attr('class', 'odometer')
+    .text( "over " + numberFormat(total) + " between " + yearRange + " and " + thisYear );
 }
 
 function initializeChart() {
@@ -331,12 +367,17 @@ function initializeChart() {
       .attr("d", area)
       .on('mouseover', (d) => {
       })
-  // plot.append("g")
-  //     .attr("transform", "translate(0," + height + ")")
-  //     .call(d3.axisBottom(x));
 
-  // plot.append("g")
-  //     .call(d3.axisLeft(y))
+  plot.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+
+  plot.append("g")
+      .attr("transform", "translate(0," + width + ")")
+      .call(d3.axisLeft(y))
+
+  // var xAxis = d3.svg.axis().scale(x)
+  // .orient("bottom").ticks(5);
 
   plot.append("text")
       .attr("fill", "#000")
@@ -344,6 +385,14 @@ function initializeChart() {
       .attr("y", 6)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
+      // .text("Total casualties")
+
+  plot.append("text")
+      .attr("fill", "#000")
+      .attr("x", 6)
+      .attr("dx", "0.71em")
+      .attr("text-anchor", "end")
+      // .text("year")
 }
 
 

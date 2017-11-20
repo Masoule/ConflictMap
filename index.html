@@ -2,13 +2,46 @@
 <html>
 
   <head>
-  	<title>D3 Mapping Timeline</title>
+  	<title>ConsflictMap</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="./dist/style.css" />
-
+    <link rel="stylesheet" href="./dist/odometer-theme-minimal.css" />
+    <script src="https://use.fontawesome.com/c015fc6f4a.js"></script>
+    <link rel="icon" type="image/png" href="favicon.png">
   </head>
 
-    <body>
+  <body>
+
+    <div class="modal">
+      <div class="about-modal">
+        <span class="close-modal">&times;</span>
+        <h3>Colflict Map</h3>
+        <p> Conflict map is a data visualization depicting the historical timeline of human violence in the past 600 years. The topic was inspired by <a href="https://stevenpinker.com/">Steven Pinker</a>'s "The Better Angels of Our Nature: Why Violence Has Declined"</p>
+
+        <div class="features">
+          <ul>
+            <li><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> Use the slider at the buttom of the page to change the year range in the map and area chart</li>
+            <li><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> Circles on the map show the location of the battles in selected year range. Circles are scaled proportional to the number of casualties in each battle. There was no data available for the battles shown by grey circles.</li>
+            <li><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> Hover your mouse over the circles to view more info on the individual battles</li>
+            <li><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> The area chart plots the total number of casualties per year, from the year 1400 up to the selected year</li>
+          </ul>
+        </div>
+
+        <p class="modal-footer" aria-hidden="true"> Conflict data courtesy of Prof <a href="http://www.iies.su.se/about-us/staff/academic-staff/arash-nekoei-1.179222">Arash Nekoei</a>, Institute for International Economic Studies, Stockholm University
+        <br></br>
+        Developed and designed by <a href="www.salome.tech">Salome Siavoshi</a> <a href="https://github.com/Masoule/ConflictMap"><i class="fa fa-github" aria-hidden="true"></i></a>
+        </p>
+      </div>
+    </div>
+
+    <section class="main">
+      <div class="open-modal-icon">
+        <i id="open-modal"
+          class="fa fa-info-circle"
+          aria-hidden="true">
+        </i>
+      </div>
+
       <script src="https://d3js.org/d3.v4.min.js"></script>
       <script src="https://d3js.org/topojson.v2.min.js"></script>
       <script src="https://d3js.org/d3-geo.v1.min.js"></script>
@@ -19,9 +52,9 @@
       <!-- <script src="/datamaps.world.min.js"></script> -->
       <!-- <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script> -->
       <!-- <script src="../src/main.js"></script> -->
-
+      <script src="./src/odometer.min.js"></script>
       <script src="./dist/bundle.js"></script>
-
-    </body>
+    </section>
+  </body>
 
 </html>
