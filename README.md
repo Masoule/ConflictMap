@@ -1,6 +1,7 @@
 # ConflictMap
 
-An interactive data visualization of human conflicts throughout history 
+An interactive data visualization of human conflicts throughout history
+
 
 ## Features
 
@@ -9,4 +10,4 @@ An interactive data visualization of human conflicts throughout history
 * The conflict map Presents data as properly scaled circles at respective locations on a geojson world map
 * Mouseover shows additional information on each circle
 
-[Live Link](https://masoule.github.io/ConflictMap) 
+[Live Link](https://masoule.github.io/ConflictMap)
