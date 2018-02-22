@@ -3,6 +3,10 @@
 An interactive data visualization of human conflicts throughout history
 
 
+<img src="https://github.com/Masoule/ConflictMap/blob/master/images/Screen%20Shot%202018-02-21%20at%2011.44.29%20PM.png" alt="about" width="600px" style="margin: 0 auto;">
+
+<img src="https://github.com/Masoule/ConflictMap/blob/master/images/Screen%20Shot%202018-02-21%20at%2011.45.04%20PM.png" alt="conflict mouseover" width="600px" style="margin: 0 auto;">
+
 ## Features
 
 * Slider element updates the headlines, map, and area chart
