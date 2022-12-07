@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/Masoule/D3-Vis#readme",
   "devDependencies": {
-    "webpack": "^3.8.1"
+    "webpack": "^3.12.0"
   }
 }
